@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: Src
+      target: final
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATABASE__CONNECTIONSTRING=Host=host.docker.internal;Username=postgres;Password=admin;Database=moneta_push_db
+    ports:
+      - 5000:80
