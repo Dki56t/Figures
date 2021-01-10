@@ -7,6 +7,6 @@ namespace Infrastructure.Repositories
     {
         Task<long> StoreAsync(IFigure figure);
 
-        Task<T> GetByIdAsync<T>(long id) where T : IFigure;
+        Task<T> GetByIdAsync<T>(long id) where T : class, IFigure;
     }
 }

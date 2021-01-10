@@ -29,7 +29,7 @@ namespace Implementation.DataAccess.Repositories
             return info.Id;
         }
 
-        public async Task<T> GetByIdAsync<T>(long id) where T : IFigure
+        public async Task<T> GetByIdAsync<T>(long id) where T : class, IFigure
         {
             await using var uow = new Db();
 
@@ -38,11 +38,11 @@ namespace Implementation.DataAccess.Repositories
             if (info?.Figure == null)
                 throw new EntityNotFoundException($"There is no figure associated with id {id}");
 
-            if (!(info.Figure is T))
+            if (!(info.Figure is T figure))
                 throw new InvalidOperationException(
                     $"Figure with specified id is of type '{info.Figure.GetType()}' instead of '{typeof(T)}'");
 
-            return (T) info.Figure;
+            return figure;
         }
     }
 }

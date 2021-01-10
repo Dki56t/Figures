@@ -14,6 +14,7 @@ namespace Tests.UnitTests.Core
         [InlineData(1, double.MaxValue, double.MaxValue)]
         [InlineData(double.MaxValue, 1, double.MaxValue)]
         [InlineData(double.MaxValue, double.MaxValue, 1)]
+        [InlineData(100, 1, 1)]
         public void ShouldThrowIfArgumentsAreIncorrect(double a, double b, double c)
         {
             Should.Throw<ArgumentException>(() => new Triangle(a, b, c));

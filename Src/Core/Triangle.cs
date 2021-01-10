@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Core
 {
@@ -16,6 +17,10 @@ namespace Core
 
             if (c <= 0)
                 throw new ArgumentException(wrongArgumentMessage, nameof(c));
+
+            var sidesArray = new[] { a, b, c }.OrderByDescending(x => x).ToArray();
+            if (sidesArray[0] > sidesArray[1] + sidesArray[2])
+                throw new ArgumentException("The triangle inequality is not satisfied");
 
             var area = GetArea(a, b, c);
             if (double.IsInfinity(area) || double.IsNaN(area))
