@@ -1,7 +1,8 @@
-API.
+## API.
 
-To store a figure.
-Request: ```POST``` ```/figure```
+### Storing a figure.
+
+##### Request: ```POST``` ```/figure```
 
 Example:
 
@@ -25,7 +26,7 @@ curl --location --request POST 'https://localhost:5001/figure' \
 }'
 ```
 
-Response
+##### Response
 
 HTTP Code: ```200```
 
@@ -35,7 +36,7 @@ HTTP Code: ```200```
 }
 ```
 
-If any of provided arguments was not valid:
+#### If any of provided arguments was not valid:
 
 ```
 curl --location --request POST 'https://localhost:5001/figure' \
@@ -48,7 +49,7 @@ curl --location --request POST 'https://localhost:5001/figure' \
 }'
 ```
 
-Response
+##### Response
 
 HTTP Code: ```400```
 
@@ -59,9 +60,9 @@ HTTP Code: ```400```
 }
 ```
 
-Area calculation.
+### Area calculation.
 
-Request: ```GET``` ```/figure/{id}```
+##### Request: ```GET``` ```/figure/{id}```
 
 Example:
 
@@ -69,7 +70,7 @@ Example:
 curl --location --request GET 'https://localhost:5001/figure/3'
 ```
 
-Response
+##### Response
 
 HTTP Code: ```200```
 
@@ -79,11 +80,11 @@ HTTP Code: ```200```
 }
 ```
 
-If there is no such a figure.
+#### If there is no such a figure.
 
 ```curl --location --request GET 'https://localhost:5001/figure/5'```
 
-Response
+##### Response
 
 HTTP Code: ```404```
 
