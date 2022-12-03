@@ -35,7 +35,7 @@ HTTP Code: ```200```
 }
 ```
 
-If any of provided arguments is not valid:
+If any of provided arguments was not valid:
 
 ```
 curl --location --request POST 'https://localhost:5001/figure' \
