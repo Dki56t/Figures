@@ -1,7 +1,6 @@
-﻿namespace API.Model.Figures
+﻿namespace API.Model.Figures;
+
+public sealed class CircleDto : IFigureDto
 {
-    public sealed class CircleDto : IFigureDto
-    {
-        public double Radius { get; set; }
-    }
+    public double Radius { get; set; }
 }

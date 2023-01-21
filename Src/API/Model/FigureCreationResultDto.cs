@@ -1,7 +1,6 @@
-﻿namespace API.Model
+﻿namespace API.Model;
+
+public sealed class FigureCreationResultDto
 {
-    public sealed class FigureCreationResultDto
-    {
-        public long Id { get; set; }
-    }
+    public long Id { get; set; }
 }

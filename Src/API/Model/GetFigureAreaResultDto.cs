@@ -1,7 +1,6 @@
-﻿namespace API.Model
+﻿namespace API.Model;
+
+public sealed class GetFigureAreaResultDto
 {
-    public sealed class GetFigureAreaResultDto
-    {
-        public double Area { get; set; }
-    }
+    public double Area { get; set; }
 }

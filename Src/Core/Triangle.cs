@@ -1,49 +1,48 @@
 ﻿using System;
 using System.Linq;
 
-namespace Core
+namespace Core;
+
+public sealed class Triangle : IFigure
 {
-    public sealed class Triangle : IFigure
+    public Triangle(double a, double b, double c)
     {
-        public Triangle(double a, double b, double c)
-        {
-            const string wrongArgumentMessage = "Length of a side of the triangle should be a positive number";
+        const string wrongArgumentMessage = "Length of a side of the triangle should be a positive number";
 
-            if (a <= 0)
-                throw new ArgumentException(wrongArgumentMessage, nameof(a));
+        if (a <= 0)
+            throw new ArgumentException(wrongArgumentMessage, nameof(a));
 
-            if (b <= 0)
-                throw new ArgumentException(wrongArgumentMessage, nameof(b));
+        if (b <= 0)
+            throw new ArgumentException(wrongArgumentMessage, nameof(b));
 
-            if (c <= 0)
-                throw new ArgumentException(wrongArgumentMessage, nameof(c));
+        if (c <= 0)
+            throw new ArgumentException(wrongArgumentMessage, nameof(c));
 
-            var sidesArray = new[] { a, b, c }.OrderByDescending(x => x).ToArray();
-            if (sidesArray[0] > sidesArray[1] + sidesArray[2])
-                throw new ArgumentException("The triangle inequality is not satisfied");
+        var sidesArray = new[] { a, b, c }.OrderByDescending(x => x).ToArray();
+        if (sidesArray[0] > sidesArray[1] + sidesArray[2])
+            throw new ArgumentException("The triangle inequality is not satisfied");
 
-            var area = GetArea(a, b, c);
-            if (double.IsInfinity(area) || double.IsNaN(area))
-                throw new ArgumentException("Triangle can not be represented");
+        var area = GetArea(a, b, c);
+        if (double.IsInfinity(area) || double.IsNaN(area))
+            throw new ArgumentException("Triangle can not be represented");
 
-            A = a;
-            B = b;
-            C = c;
-        }
+        A = a;
+        B = b;
+        C = c;
+    }
 
-        public double A { get; }
-        public double B { get; }
-        public double C { get; }
+    public double A { get; }
+    public double B { get; }
+    public double C { get; }
 
-        public double GetArea()
-        {
-            return GetArea(A, B, C);
-        }
+    public double GetArea()
+    {
+        return GetArea(A, B, C);
+    }
 
-        private static double GetArea(double a, double b, double c)
-        {
-            var p = (a + b + c) / 2;
-            return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
-        }
+    private static double GetArea(double a, double b, double c)
+    {
+        var p = (a + b + c) / 2;
+        return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
     }
 }

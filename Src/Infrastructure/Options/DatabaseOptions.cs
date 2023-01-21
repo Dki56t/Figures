@@ -1,7 +1,6 @@
-﻿namespace Infrastructure.Options
+﻿namespace Infrastructure.Options;
+
+public sealed class DatabaseOptions
 {
-    public sealed class DatabaseOptions
-    {
-        public string ConnectionString { get; set; }
-    }
+    public string ConnectionString { get; set; }
 }

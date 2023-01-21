@@ -3,36 +3,35 @@ using Implementation.DataAccess.DataModel;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace Implementation.DataAccess
+namespace Implementation.DataAccess;
+
+public sealed class Db : DbContext
 {
-    public sealed class Db : DbContext
+    private static readonly JsonSerializerSettings SerializerSettings = new()
     {
-        private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.All,
-            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
-        };
+        TypeNameHandling = TypeNameHandling.All,
+        TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
+    };
 
-        private readonly string _connectionString;
+    private readonly string _connectionString;
 
-        public Db(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+    public Db(string connectionString)
+    {
+        _connectionString = connectionString;
+    }
 
-        public DbSet<FigureInfo> FigureInfos { get; set; }
+    public DbSet<FigureInfo> FigureInfos { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            options.UseSqlite(_connectionString);
-        }
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    {
+        options.UseSqlite(_connectionString);
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<FigureInfo>()
-                .Property(i => i.Figure)
-                .HasConversion(v => JsonConvert.SerializeObject(v, SerializerSettings),
-                    s => JsonConvert.DeserializeObject<IFigure>(s, SerializerSettings));
-        }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<FigureInfo>()
+            .Property(i => i.Figure)
+            .HasConversion(v => JsonConvert.SerializeObject(v, SerializerSettings),
+                s => JsonConvert.DeserializeObject<IFigure>(s, SerializerSettings));
     }
 }

@@ -5,26 +5,25 @@ using Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Implementation.DataAccess
+namespace Implementation.DataAccess;
+
+public sealed class DataAccessModule : Module
 {
-    public sealed class DataAccessModule : Module
+    private readonly IConfiguration _configuration;
+
+    public DataAccessModule(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        public DataAccessModule(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+    protected override void Load(ContainerBuilder builder)
+    {
+        builder.RegisterType<FigureRepository>().AsImplementedInterfaces();
+        builder.RegisterType<ContextFactory>();
 
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<FigureRepository>().AsImplementedInterfaces();
-            builder.RegisterType<ContextFactory>();
+        var services = new ServiceCollection();
+        services.Configure<DatabaseOptions>(_configuration.GetSection("Database"));
 
-            var services = new ServiceCollection();
-            services.Configure<DatabaseOptions>(_configuration.GetSection("Database"));
-
-            builder.Populate(services);
-        }
+        builder.Populate(services);
     }
 }

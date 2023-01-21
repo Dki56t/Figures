@@ -1,6 +1,5 @@
-﻿namespace API.Model.Figures
+﻿namespace API.Model.Figures;
+
+public interface IFigureDto
 {
-    public interface IFigureDto
-    {
-    }
 }

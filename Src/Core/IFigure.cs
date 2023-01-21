@@ -1,7 +1,6 @@
-﻿namespace Core
+﻿namespace Core;
+
+public interface IFigure
 {
-    public interface IFigure
-    {
-        double GetArea();
-    }
+    double GetArea();
 }

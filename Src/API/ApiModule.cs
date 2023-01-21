@@ -2,20 +2,19 @@
 using Implementation.DataAccess;
 using Microsoft.Extensions.Configuration;
 
-namespace API
+namespace API;
+
+public sealed class ApiModule : Module
 {
-    public sealed class ApiModule : Module
+    private readonly IConfiguration _configuration;
+
+    public ApiModule(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        public ApiModule(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterModule(new DataAccessModule(_configuration));
-        }
+    protected override void Load(ContainerBuilder builder)
+    {
+        builder.RegisterModule(new DataAccessModule(_configuration));
     }
 }

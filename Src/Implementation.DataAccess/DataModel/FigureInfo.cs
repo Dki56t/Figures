@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Core;
 
-namespace Implementation.DataAccess.DataModel
-{
-    public class FigureInfo
-    {
-        public long Id { get; set; }
+namespace Implementation.DataAccess.DataModel;
 
-        [Required]
-        public IFigure Figure { get; set; }
-    }
+public class FigureInfo
+{
+    public long Id { get; set; }
+
+    [Required] public IFigure Figure { get; set; }
 }

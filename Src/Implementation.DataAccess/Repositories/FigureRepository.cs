@@ -5,51 +5,50 @@ using Implementation.DataAccess.DataModel;
 using Infrastructure.Exceptions;
 using Infrastructure.Repositories;
 
-namespace Implementation.DataAccess.Repositories
+namespace Implementation.DataAccess.Repositories;
+
+public sealed class FigureRepository : IFiguresRepository
 {
-    public sealed class FigureRepository : IFiguresRepository
+    private readonly ContextFactory _contextFactory;
+
+    public FigureRepository(ContextFactory contextFactory)
     {
-        private readonly ContextFactory _contextFactory;
+        _contextFactory = contextFactory;
+    }
 
-        public FigureRepository(ContextFactory contextFactory)
+    public async Task<long> StoreAsync(IFigure figure)
+    {
+        if (figure == null)
+            throw new ArgumentNullException(nameof(figure));
+
+        var info = new FigureInfo
         {
-            _contextFactory = contextFactory;
-        }
+            Figure = figure
+        };
 
-        public async Task<long> StoreAsync(IFigure figure)
-        {
-            if (figure == null)
-                throw new ArgumentNullException(nameof(figure));
+        await using var uow = _contextFactory.CreateContext();
 
-            var info = new FigureInfo
-            {
-                Figure = figure
-            };
+        // ReSharper disable once MethodHasAsyncOverload - sync overload is preferred here as per docs
+        uow.FigureInfos.Add(info);
 
-            await using var uow = _contextFactory.CreateContext();
+        await uow.SaveChangesAsync().ConfigureAwait(false);
 
-            // ReSharper disable once MethodHasAsyncOverload - sync overload is preferred here as per docs
-            uow.FigureInfos.Add(info);
+        return info.Id;
+    }
 
-            await uow.SaveChangesAsync().ConfigureAwait(false);
+    public async Task<T> GetByIdAsync<T>(long id) where T : class, IFigure
+    {
+        await using var uow = _contextFactory.CreateContext();
 
-            return info.Id;
-        }
+        var info = await uow.FigureInfos.FindAsync(id).ConfigureAwait(false);
 
-        public async Task<T> GetByIdAsync<T>(long id) where T : class, IFigure
-        {
-            await using var uow = _contextFactory.CreateContext();
+        if (info?.Figure == null)
+            throw new EntityNotFoundException($"There is no figure associated with id {id}");
 
-            var info = await uow.FigureInfos.FindAsync(id).ConfigureAwait(false);
+        if (!(info.Figure is T figure))
+            throw new InvalidOperationException(
+                $"Figure with specified id is of type '{info.Figure.GetType()}' instead of '{typeof(T)}'");
 
-            if (info?.Figure == null)
-                throw new EntityNotFoundException($"There is no figure associated with id {id}");
-
-            if (!(info.Figure is T figure))
-                throw new InvalidOperationException(
-                    $"Figure with specified id is of type '{info.Figure.GetType()}' instead of '{typeof(T)}'");
-
-            return figure;
-        }
+        return figure;
     }
 }
