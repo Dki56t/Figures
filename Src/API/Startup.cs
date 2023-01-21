@@ -1,8 +1,11 @@
 using API.Converters;
 using API.Middlewares;
 using Autofac;
+using Implementation.DataAccess;
+using Infrastructure.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +27,8 @@ namespace API
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new FigureConverter()));
 
+            services.Configure<DatabaseOptions>(Configuration.GetSection("Database"));
+
             services.AddHealthChecks();
         }
 
@@ -35,6 +40,8 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            InitializeDatabase(app);
+
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseMiddleware<ApiExceptionHandlingMiddleware>();
@@ -50,6 +57,12 @@ namespace API
                 endpoints.MapHealthChecks("/");
                 endpoints.MapControllers();
             });
+        }
+
+        private static void InitializeDatabase(IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            scope.ServiceProvider.GetRequiredService<ContextFactory>().CreateContext().Database.Migrate();
         }
     }
 }

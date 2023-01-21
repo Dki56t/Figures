@@ -13,12 +13,18 @@ namespace Implementation.DataAccess
             TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
         };
 
+        private readonly string _connectionString;
+
+        public Db(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         public DbSet<FigureInfo> FigureInfos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // TODO extract as appsetting
-            options.UseSqlite("Data Source=figures.db");
+            options.UseSqlite(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

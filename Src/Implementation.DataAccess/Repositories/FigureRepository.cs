@@ -9,6 +9,13 @@ namespace Implementation.DataAccess.Repositories
 {
     public sealed class FigureRepository : IFiguresRepository
     {
+        private readonly ContextFactory _contextFactory;
+
+        public FigureRepository(ContextFactory contextFactory)
+        {
+            _contextFactory = contextFactory;
+        }
+
         public async Task<long> StoreAsync(IFigure figure)
         {
             if (figure == null)
@@ -19,7 +26,7 @@ namespace Implementation.DataAccess.Repositories
                 Figure = figure
             };
 
-            await using var uow = new Db();
+            await using var uow = _contextFactory.CreateContext();
 
             // ReSharper disable once MethodHasAsyncOverload - sync overload is preferred here as per docs
             uow.FigureInfos.Add(info);
@@ -31,7 +38,7 @@ namespace Implementation.DataAccess.Repositories
 
         public async Task<T> GetByIdAsync<T>(long id) where T : class, IFigure
         {
-            await using var uow = new Db();
+            await using var uow = _contextFactory.CreateContext();
 
             var info = await uow.FigureInfos.FindAsync(id).ConfigureAwait(false);
 

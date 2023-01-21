@@ -8,6 +8,7 @@ namespace Implementation.DataAccess
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<FigureRepository>().AsImplementedInterfaces();
+            builder.RegisterType<ContextFactory>();
         }
     }
 }

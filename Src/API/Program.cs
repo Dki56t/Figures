@@ -1,5 +1,4 @@
 using Autofac.Extensions.DependencyInjection;
-using Implementation.DataAccess;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -9,8 +8,6 @@ namespace API
     {
         public static void Main(string[] args)
         {
-            DatabaseHelper.Migrate();
-
             CreateHostBuilder(args).Build().Run();
         }
 
