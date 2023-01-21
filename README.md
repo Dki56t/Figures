@@ -7,45 +7,48 @@
 Example:
 
 ```
-curl --location --request POST 'https://localhost:5001/figure' \
+curl --location --request POST 'https://localhost:5001/figures' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "type": "circle",
-    "radius": 8
+    "radius": 3
 }'
 ```
 
 ```
-curl --location --request POST 'https://localhost:5001/figure' \
+curl --location --request POST 'https://localhost:5001/figures' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "type": "triangle",
-    "A": 3,
-    "B": 4,
-    "C": 5
+    "a": 3,
+    "b": 4,
+    "c": 5
 }'
 ```
 
 ##### Response
 
-HTTP Code: ```200```
+HTTP Code: ```201```
 
 ```
 {
-    "id": 1
+    "type": "triangle",
+    "a": 3.0,
+    "b": 4.0,
+    "c": 5.0
 }
 ```
 
 #### If any of provided arguments was not valid:
 
 ```
-curl --location --request POST 'https://localhost:5001/figure' \
+curl --location --request POST 'https://localhost:5001/figures' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "type": "triangle",
-    "A": -3,
-    "B": 4,
-    "C": 5
+    "a": -3,
+    "b": 4,
+    "c": 5
 }'
 ```
 
@@ -60,14 +63,50 @@ HTTP Code: ```400```
 }
 ```
 
-### Area calculation.
+### Retrieving figures
 
 ##### Request: ```GET``` ```/figure/{id}```
 
 Example:
 
 ```
-curl --location --request GET 'https://localhost:5001/figure/3'
+curl --location --request GET 'https://localhost:5001/figures/1'
+```
+
+##### Response
+
+HTTP Code: ```200```
+
+```
+{
+    "type": "circle",
+    "radius": 8.0
+}
+```
+
+#### If there is no such a figure.
+
+```curl --location --request GET 'https://localhost:5001/figures/5```
+
+##### Response
+
+HTTP Code: ```404```
+
+```
+{
+    "title": "Specified entity does not exist",
+    "detail": "There is no figure associated with id 5"
+}
+```
+
+### Area calculation.
+
+##### Request: ```GET``` ```/figure/{id}/area```
+
+Example:
+
+```
+curl --location --request GET 'https://localhost:5001/figures/1/area'
 ```
 
 ##### Response
@@ -82,7 +121,7 @@ HTTP Code: ```200```
 
 #### If there is no such a figure.
 
-```curl --location --request GET 'https://localhost:5001/figure/5'```
+```curl --location --request GET 'https://localhost:5001/figures/5/area```
 
 ##### Response
 

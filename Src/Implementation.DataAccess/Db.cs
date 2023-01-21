@@ -17,6 +17,7 @@ namespace Implementation.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
+            // TODO extract as appsetting
             options.UseSqlite("Data Source=figures.db");
         }
 

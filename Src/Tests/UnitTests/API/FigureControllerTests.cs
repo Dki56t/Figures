@@ -1,57 +1,103 @@
 ﻿using System;
-using System.Threading.Tasks;
-using API.Controllers;
+using API.Converters;
 using API.Model.Figures;
-using Core;
-using Infrastructure.Repositories;
-using NSubstitute;
+using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
 namespace Tests.UnitTests.API
 {
-    public sealed class FigureControllerTests
+    public sealed class FiguresConverterTests
     {
-        private const double Precision = 0.000000001;
+        [Fact]
+        public void ShouldConvertJsonToTriangleDto()
+        {
+            const string json = "{\"type\":\"triangle\",\"a\":3.0,\"b\":4.0,\"c\":5.0}";
+
+            var triangle = Should.NotThrow(() => DeserializeJson(json)) as TriangleDto;
+
+            triangle.ShouldNotBeNull();
+            triangle.A.ShouldBe(3);
+            triangle.B.ShouldBe(4);
+            triangle.C.ShouldBe(5);
+        }
 
         [Fact]
-        public async Task ShouldStorePassedFigure()
+        public void ShouldConvertJsonToCircleDto()
         {
-            const long figureId = 42;
+            const string json = "{\"type\":\"circle\",\"radius\":3.0}";
 
-            var repository = Substitute.For<IFigureRepository>();
-            repository.StoreAsync(Arg.Any<IFigure>()).Returns(Task.FromResult(figureId));
+            var circle = Should.NotThrow(() => DeserializeJson(json)) as CircleDto;
 
-            var controller = new FigureController(repository);
+            circle.ShouldNotBeNull();
+            circle.Radius.ShouldBe(3);
+        }
 
-            var result = await controller.StoreFigureAsync(new TriangleDto
+        [Fact]
+        public void ShouldConvertTriangleDtoToJson()
+        {
+            var json = Should.NotThrow(() => SerializeJson(new TriangleDto
             {
                 A = 3,
                 B = 4,
                 C = 5
-            }).ConfigureAwait(false);
+            }));
 
-            result.ShouldNotBeNull();
-            result.Id.ShouldBe(figureId);
-
-            await repository.Received(1).StoreAsync(Arg.Is<Triangle>(t =>
-                    Math.Abs(t.A - 3) < Precision && Math.Abs(t.B - 4) < Precision &&
-                    Math.Abs(t.C - 5) < Precision))
-                .ConfigureAwait(false);
+            json.ShouldBe("{\"type\":\"triangle\",\"a\":3.0,\"b\":4.0,\"c\":5.0}");
         }
 
         [Fact]
-        public async Task ShouldReturnFiguresArea()
+        public void ShouldNotExtendRandomObjectWithType()
         {
-            var repository = Substitute.For<IFigureRepository>();
-            repository.GetByIdAsync<IFigure>(Arg.Any<long>()).Returns(new Triangle(3, 4, 5));
+            var json = Should.NotThrow(() => SerializeJson(new
+            {
+                A = 3,
+                B = 4,
+                C = 5
+            }));
 
-            var controller = new FigureController(repository);
+            json.ShouldBe("{\"A\":3,\"B\":4,\"C\":5}");
+        }
 
-            var result = await controller.GetFigureAreaAsync(42).ConfigureAwait(false);
+        [Fact]
+        public void ShouldConvertCircleDtoToJson()
+        {
+            var json = Should.NotThrow(() => SerializeJson(new CircleDto
+            {
+                Radius = 3
+            }));
 
-            result.ShouldNotBeNull();
-            Math.Abs(result.Area - 6).ShouldBeLessThan(Precision);
+            json.ShouldBe("{\"type\":\"circle\",\"radius\":3.0}");
+        }
+
+        [Fact]
+        public void ShouldThrowIfTypeIsNotSupported()
+        {
+            const string json = "{\"type\":\"square\",\"a\":3.0}";
+
+            var exception = Should.Throw<InvalidOperationException>(() => DeserializeJson(json));
+
+            exception.Message.ShouldBe("'square' type of figure is not defined or is not supported");
+        }
+
+        [Fact]
+        public void ShouldThrowIfTypeIsNotSpecified()
+        {
+            const string json = "{\"a\":3.0}";
+
+            var exception = Should.Throw<InvalidOperationException>(() => DeserializeJson(json));
+
+            exception.Message.ShouldBe("Type property is not present in json");
+        }
+
+        private static IFigureDto DeserializeJson(string json)
+        {
+            return JsonConvert.DeserializeObject<IFigureDto>(json, new FigureConverter());
+        }
+
+        private static string SerializeJson(object value)
+        {
+            return JsonConvert.SerializeObject(value, Formatting.None, new FigureConverter());
         }
     }
 }

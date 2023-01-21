@@ -7,7 +7,7 @@ using Infrastructure.Repositories;
 
 namespace Implementation.DataAccess.Repositories
 {
-    public sealed class FigureRepository : IFigureRepository
+    public sealed class FigureRepository : IFiguresRepository
     {
         public async Task<long> StoreAsync(IFigure figure)
         {

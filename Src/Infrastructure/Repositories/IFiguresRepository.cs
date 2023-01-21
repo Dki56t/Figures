@@ -3,7 +3,7 @@ using Core;
 
 namespace Infrastructure.Repositories
 {
-    public interface IFigureRepository
+    public interface IFiguresRepository
     {
         Task<long> StoreAsync(IFigure figure);
 
