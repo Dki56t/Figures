@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 
+namespace Tests.IntegrationTests;
+
 internal static class Configurator
 {
     static Configurator()
