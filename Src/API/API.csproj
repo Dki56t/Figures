@@ -18,6 +18,4 @@
     <ProjectReference Include="..\Implementation.DataAccess\Implementation.DataAccess.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
-
-
 </Project>
