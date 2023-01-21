@@ -2,7 +2,7 @@
 
 ### Storing a figure.
 
-##### Request: ```POST``` ```/figure```
+##### Request: ```POST``` ```/figures```
 
 Example:
 
@@ -63,9 +63,9 @@ HTTP Code: ```400```
 }
 ```
 
-### Retrieving figures
+### Retrieving a figure
 
-##### Request: ```GET``` ```/figure/{id}```
+##### Request: ```GET``` ```/figures/{id}```
 
 Example:
 
@@ -101,7 +101,7 @@ HTTP Code: ```404```
 
 ### Area calculation.
 
-##### Request: ```GET``` ```/figure/{id}/area```
+##### Request: ```GET``` ```/figures/{id}/area```
 
 Example:
 
