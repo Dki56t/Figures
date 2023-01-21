@@ -34,7 +34,7 @@ namespace API
 
         public virtual void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule<ApiModule>();
+            builder.RegisterModule(new ApiModule(Configuration));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
