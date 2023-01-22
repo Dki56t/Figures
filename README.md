@@ -11,7 +11,7 @@ curl --location --request POST 'https://localhost:5001/figures' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "type": "circle",
-    "radius": 3
+    "radius": 3.0
 }'
 ```
 
@@ -20,9 +20,9 @@ curl --location --request POST 'https://localhost:5001/figures' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "type": "triangle",
-    "a": 3,
-    "b": 4,
-    "c": 5
+    "a": 3.0,
+    "b": 4.0,
+    "c": 5.0
 }'
 ```
 
@@ -46,9 +46,9 @@ curl --location --request POST 'https://localhost:5001/figures' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "type": "triangle",
-    "a": -3,
-    "b": 4,
-    "c": 5
+    "a": -3.0,
+    "b": 4.0,
+    "c": 5.0
 }'
 ```
 
